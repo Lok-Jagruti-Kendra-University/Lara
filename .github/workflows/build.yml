@@ -6,6 +6,29 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
+  evaluate_project:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install requests pandas openpyxl bs4
+        
+      - name: Aggregate Scores
+        run: python calculate_scores.py  # Custom script for scoring
+
+      - name: Upload SonarCloud Summary Excel
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonarcloud_summary
+          path: sonarcloud_summary.xlsx
   sonarqube:
     name: SonarQube
     runs-on: ubuntu-latest
