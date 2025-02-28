@@ -19,16 +19,27 @@ jobs:
           python-version: '3.9'
 
       - name: Install dependencies
-        run: pip install requests pandas openpyxl bs4
-        
+        run: pip install requests pandas openpyxl bs4 csv
+
       - name: Aggregate Scores
         run: python calculate_scores.py  # Custom script for scoring
-
-      - name: Upload SonarCloud Summary Excel
+        
+      - name: Aggregate Scores
+        run: python overall.py  # Custom script for scoring
+         
+      - name: Upload SonarCloud Summary Excel and csv
         uses: actions/upload-artifact@v4
         with:
           name: sonarcloud_summary
           path: sonarcloud_summary.xlsx
+
+      - name: Upload SonarCloud Summary csv
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonarcloud_overall
+          path: sonarcloud_all_projects_analysis.csv
+      
+     
   sonarqube:
     name: SonarQube
     runs-on: ubuntu-latest
